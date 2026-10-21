@@ -23,11 +23,6 @@ app.use(helmet({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Admin dashboard (password-only login) — mounted before the public static
-// files so /admin always asks for the password first.
-app.use('/admin/api', adminAuth, adminRouter);
-app.use('/admin', adminAuth, express.static(path.join(__dirname, 'public/admin')));
-
 // Public site
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
@@ -35,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] })
 app.use('/api', quotesRouter);
 
 // Admin dashboard (protected)
+app.use('/admin/api', adminAuth, adminRouter);
+app.use('/admin', adminAuth, express.static(path.join(__dirname, 'public/admin')));
 
 app.get('/healthz', (req, res) => res.json({ ok: true }));
 
